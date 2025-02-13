@@ -47,3 +47,36 @@ const arePropsEqual = (prevProps, nextProps) => {
 
 **📌즉, 실제 성능 최적화가 필요한 경우에만"적용해야 한다!** 
 👉 그러므로 profiler를 이용해서 성능상 이점이 있는지 확인 후 사용해야 한다!!
+
+### 얕은 비교(Shallow Compare)
+✔ 값 자체가 같은지(=== 연산자 사용)만 확인하고, 객체 내부까지는 확인하지 않는 방식
+✔ 기본 자료형(`number, string, boolean`)은 문제가 없지만,
+✔ 객체, 배열, 함수 같은 참조형 데이터는 === 비교 시 항상 "다른 값"으로 판단됨
+✔ React에서 `React.memo`, `useEffect`, `useCallback`, `useMemo` 등에서 사용됨
+✔ 객체를 props로 전달할 때는 useMemo나 useCallback으로 최적화해야 한다.
+
+### 깊은 비교(Deep Compare)
+✔ 단순히 메모리 주소가 같은지(===) 확인하는 얕은 비교(Shallow Compare)와 다르게, 객체 안의 값(모든 속성)들까지 확인한다.
+✔ `JSON.stringify`를 사용하면 객체를 문자열로 변환한 후 비교하므로 내부 값이 같으면 `true`를 반환한다.
+
+```js
+const obj1 = { a: 1, b: 2 };
+const obj2 = { a: 1, b: 2 };
+
+// 얕은 비교
+console.log(obj1 === obj2); // false (참조값이 다름)
+
+// 깊은 비교
+console.log(JSON.stringify(obj1) === JSON.stringify(obj2)); // true
+```
+🔴 하지만 순서가 다른 경우({ b: 2, a: 1 }) 비교가 실패할 수 있음
+
+📌**깊은 비교 방법** 
+1. Object depth가 깊지 않은 경우 : JSON.stringify()사용
+2. Object depth가 깊은 경우 : lodash라이브러리의 isEqual() 사용
+
+⚠️리엑트가 리렌더링 되는 경우
+1. state 변경이 있을 때
+2. 부모 컴포넌트가 렌더링 될 떄
+3. shouldComponentUpdate에서 true가 반환될 때
+4. forceUpdate가 실행될 때
