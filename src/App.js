@@ -28,9 +28,6 @@ function App() {
           message = {value}
           posts = {posts}/>
       </div>
-      <div>
-        {console.log(posts)}
-      </div>
     </div>
   );
 }
