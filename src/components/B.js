@@ -1,18 +1,20 @@
 import React from 'react'
 
-const Message = ({message}) => {
+const Message = React.memo(({message}) => {
   return <p>{message}</p>
-}
+})
 
-const ListItem = ({post}) => {
-  return (
-    <li key={post.id}>
-      <p>{post.title}</p>
-    </li>
-  )
-}
+const ListItem = React.memo(
+  ({post}) => {
+    return (
+      <li key={post.id}>
+        <p>{post.title}</p>
+      </li>
+    )
+  }
+)
 
-const List = ({posts}) => {
+const List = React.memo(({posts}) => {
   return (
     <ul>
       {posts.map(post => 
@@ -20,7 +22,7 @@ const List = ({posts}) => {
       )}
     </ul>
   )
-}
+})
 
 // 여러 컴포넌트 나눠주기
 const B = ({message, posts}) => {
