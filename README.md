@@ -80,3 +80,35 @@ console.log(JSON.stringify(obj1) === JSON.stringify(obj2)); // true
 2. 부모 컴포넌트가 렌더링 될 떄
 3. shouldComponentUpdate에서 true가 반환될 때
 4. forceUpdate가 실행될 때
+
+### useCallback
+`useCallback`은 함수를 메모이제이션(캐싱)하는 React Hook. 불필요한 함수 재생성을 방지해서 성능을 최적화하는 역할을 한다.
+✔ useCallback을 사용하면, 특정 값이 변경되지 않는 한 함수가 새로 생성되지 않음
+✔ 리렌더링이 되어도 기존 함수를 재사용 함
+
+```jsx
+const memoizedCallback = useCallback(() => {
+  console.log("이 함수는 다시 생성되지 않음!");
+}, []);
+```
+👉 `memoizedCallback`함수는 의존성 배열이 []이므로 최초 1회만 생성된다. 그러므로 이후 렌더링되어도 같은 함수가 재사용됨.
+
+### useMemo
+- 값(연산 결과)을 캐싱(메모이제이션-Memoization)하여 불필요한 계산을 방지하는 React Hook이다.
+- 즉, 매번 계산하지 않고, 이전 결과를 재사용하는 방식으로 성능을 최적화할 수 있다.
+```jsx
+const memoizedValue = useMemo(() => 계산할 값, [의존성]);
+```
+- 계산할 값: 연산 결과를 반환하는 함수
+- 의존성 배열([]): 배열의 값이 변경될 때만 연산을 다시 수행
+✔ 의존성 값이 변하지 않으면 이전 결과를 그대로 사용
+✔ 의존성 값이 변경되면 새로운 값을 계산해서 반환
+
+- useMemo가 사용되는 경우
+1. 연산 비용이 큰 경우
+2. 객체/배열을 props로 전달할 때 React.memo와 함께 사용
+3. 렌더링될 때 불필요한 재계산을 방지하고 싶을 때
+
+### useMemo vs React.memo 차이점
+✔ useMemo는 값(연산 결과, 객체, 배열 등)을 캐싱하여 불필요한 재계산 방지
+✔ 연산 비용이 큰 경우, 객체/배열을 props로 전달할 때 최적화할 때 사용!
